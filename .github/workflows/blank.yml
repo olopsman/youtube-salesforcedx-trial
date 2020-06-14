@@ -36,7 +36,7 @@ jobs:
     - name: 'Authorize'
       run: |
         echo username value ${{ secrets.USERNAME_STAGING }}
-        sfdx force:auth:jwt:grant --clientid=${{ secrets.CONSUMER_KEY }} --username=paulo.orquillo@trailheadx.com --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
+        sfdx force:auth:jwt:grant --clientid=3MVG9ZL0ppGP5UrA6TgVpS2Zlw_DgvkTRdKaA0JlGFrtpEgdeMm._UxsckWWUfLBf9R4u4Rg79T2OLUN9P.gK --username=paulo.orquillo@trailheadx.com --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
     - name: 'Convert Metadata'
       run: sfdx force:source:convert --rootdir=force-app --outputdir=convert
     - name: 'Convert Metadata'
