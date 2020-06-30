@@ -4,34 +4,34 @@ name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-# on:
-#   pull_request:
-#     branches: [ staging ]
+on:
+  pull_request:
+    branches: [ staging ]
 
-# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# jobs:
-#   # This workflow contains a single job called "build"
-#   build:
-#     # The type of runner that the job will run on
-#     runs-on: ubuntu-latest
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
-#     steps:   
-#   # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#     - uses: actions/checkout@v2
-#     - uses: sfdx-actions/setup-sfdx@v1
-#       with:
-#         sfdx-auth-url: ${{ secrets.AUTH_SECRET }}
-#     - name: "Create Delta and Deploy App"
-#       run: |
-#         sudo npm install sfdx-git-delta@latest -g
-#         git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
-#         git fetch --all
-#         git checkout -b pr
-#         git --no-pager diff --name-status pr origin/staging
-#         sgd --to pr --from origin/staging --repo . --output .
-#         cat package/package.xml 
-#         sfdx force:source:convert --manifest=package/package.xml --outputdir=convert 
-#         sfdx force:mdapi:deploy --deploydir=convert -c -l RunLocalTests -w 30
+    steps:   
+  # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - uses: sfdx-actions/setup-sfdx@v1
+      with:
+        sfdx-auth-url: ${{ secrets.AUTH_SECRET }}
+    - name: "Create Delta and Deploy App"
+      run: |
+        sudo npm install sfdx-git-delta@latest -g
+        git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+        git fetch --all
+        git checkout -b pr
+        git --no-pager diff --name-status pr origin/staging
+        sgd --to pr --from origin/staging --repo . --output .
+        cat package/package.xml 
+        sfdx force:source:convert --manifest=package/package.xml --outputdir=convert 
+        sfdx force:mdapi:deploy --deploydir=convert -c -l RunLocalTests -w 30
     
 on:
   push:
@@ -61,7 +61,7 @@ jobs:
       run: openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out server.key -base64 -K ${{secrets.DECRYPTION_KEY}} -iv ${{secrets.DECRYPTION_IV}}
     - name: 'Authorize'
       run: sfdx force:auth:jwt:grant --clientid=${{ secrets.CONSUMER_KEY }} --username=${{ secrets.USERNAME }} --jwtkeyfile server.key --setdefaultdevhubusername --setalias=hub-org
-      - name: "Create Delta and Deploy App"
+    - name: "Create Delta and Deploy App"
       run: |
         sudo npm install sfdx-git-delta@latest -g
         sgd --to HEAD --from HEAD^ --repo . --output .
