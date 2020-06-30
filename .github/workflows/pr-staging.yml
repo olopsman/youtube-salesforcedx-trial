@@ -24,6 +24,8 @@ jobs:
     - name: "Install app"
       run: |
         sudo npm install sfdx-git-delta@latest -g
+        git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+        git fetch --all
         git checkout -b pr
         git --no-pager diff --name-status pr origin/staging
         sgd --to pr --from origin/staging --repo . --output .
